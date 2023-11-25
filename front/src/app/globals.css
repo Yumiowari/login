@@ -2,24 +2,24 @@ body{
   margin: 0;
 }
 
-header, main, footer{
+main, footer{
   display: flex;
-}
-
-main{
-  min-height: 100vh;
-  margin-top: 52px; /*compensa o header*/
-}
-
-footer, header{
-  background-color: black;
-  color: white; /*cor do texto*/
 }
 
 header{ /*o header ficará colado ao topo da tela*/
   position: fixed;
   min-width: 100vw;
   top: 0;
+}
+
+header, footer{
+  background-color: black;
+  color: white; /*cor do texto*/
+}
+
+main{
+  min-height: 100vh;
+  margin-top: 52px; /*compensa o header*/
 }
 
 footer{ /*o footer aparecerá somente ao descer a tela*/
