@@ -3,18 +3,23 @@ import Link from 'next/link'
 
 export default function Navbar () {
     return (
-        <ul className={styles['lista']}>
-            <li className={styles['opcao']}>
-                <Link href='/' className={styles['ancora']}>Home</Link>
-            </li>
+        <div className={styles['navbar']}>
+            <ul className={styles['home']}>
+                <li className={styles['opcao']}>
+                    <Link href='/' className={styles['ancora']}>Home</Link>
+                </li>
+            </ul>
 
-            <li className={styles['opcao']}>
-                <Link href='/' className={styles['ancora']}>Login</Link>
-            </li>
+            <ul className={styles['login-register']}>
+                <li className={styles['opcao']}>
+                    <Link href='/' className={styles['ancora']}>Login</Link>
+                </li>
 
-            <li className={styles['opcao']}>
-                <Link href='/' className={styles['ancora']}>Cadastro</Link>
-            </li>
-        </ul>
+                <li className={styles['opcao']}>
+                    <Link href='/' className={styles['ancora']}>Cadastro</Link>
+                </li>
+            </ul>
+        </div>
+        
     );
 }

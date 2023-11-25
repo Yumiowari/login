@@ -1,6 +1,18 @@
-.lista{
+.navbar{
     display: flex;
+    justify-content: space-between;
+}
+
+.home, .login-register{
+    display: flex;
+    flex-direction: row;
     list-style: none;
+}
+
+.login-register{
+    position: fixed;
+    padding-right: 40px;
+    right: 0;
 }
 
 .opcao{
@@ -14,9 +26,11 @@
 
 .ancora{
     color: blue;
+    text-decoration: none;
     transition: color 200ms;
 }
 
 .ancora:hover{
     color: lightblue;
+    text-decoration: underline;
 }

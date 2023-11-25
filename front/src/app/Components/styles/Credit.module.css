@@ -7,11 +7,13 @@
     margin-left: 5px; /*imita o espaçamento entre letras*/
     color: blue;
     transition: transform 200ms, color 200ms;
+    text-decoration: none;
 }
 
 .ancora:hover{
     color: lightblue;
-    transform: translateY(-3px)
+    transform: translateY(-3px);
+    text-decoration: underline;
 }
 
 .amor{
