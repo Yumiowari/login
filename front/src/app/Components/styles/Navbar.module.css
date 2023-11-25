@@ -1,12 +1,22 @@
+/*gambiarra a gente aceita, a gente só não aceita a derrota!*/
+
 .navbar{
     display: flex;
-    justify-content: space-between;
+    min-width: 100vw;
+    justify-content: center; /*"outro" ficará no centro*/
+    padding: 16px 0;
 }
 
 .home, .login-register{
+    margin: 0;
     display: flex;
     flex-direction: row;
     list-style: none;
+}
+
+.home{
+    position: fixed;
+    left: 0;
 }
 
 .login-register{
@@ -33,4 +43,8 @@
 .ancora:hover{
     color: lightblue;
     text-decoration: underline;
+}
+
+.outro{
+    margin: auto;
 }

@@ -10,6 +10,8 @@ export default function Navbar () {
                 </li>
             </ul>
 
+            <div className={styles['test']}>Login System</div>
+
             <ul className={styles['login-register']}>
                 <li className={styles['opcao']}>
                     <Link href='/' className={styles['ancora']}>Login</Link>

@@ -10,16 +10,18 @@ main{
   min-height: 100vh;
 }
 
-header, footer{
-  justify-content: center;
+footer, header{
   background-color: black;
   color: white; /*cor do texto*/
 }
 
-header{
+header{ /*o header ficará colado ao topo da tela*/
+  position: fixed;
+  min-width: 100vw;
   top: 0;
 }
 
-footer{
+footer{ /*o footer aparecerá somente ao descer a tela*/
+  justify-content: center;
   margin-top: auto;
 }
