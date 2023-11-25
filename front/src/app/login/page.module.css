@@ -1,0 +1,23 @@
+.outro{
+    align-items: center;
+}
+
+.login, .cadastro{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.entrada, .botao{
+    margin-bottom: 16px;
+}
+
+.ancora{
+    transition: transform 200ms, color 200ms;
+    color: blue;
+}
+
+.ancora:hover{
+    transform: translateY(-3px);
+    color: lightblue;
+}
