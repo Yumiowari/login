@@ -8,6 +8,7 @@ header, main, footer{
 
 main{
   min-height: 100vh;
+  margin-top: 52px; /*compensa o header*/
 }
 
 footer, header{
