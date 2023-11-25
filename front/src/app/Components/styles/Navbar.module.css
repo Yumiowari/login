@@ -2,9 +2,8 @@
 
 .navbar{
     display: flex;
-    min-width: 100%;
     justify-content: center; /*"outro" ficará no centro*/
-    padding: 16px 0; /*abraça os outros links*/
+    padding: 16px 0;
 }
 
 .home, .login-register{
@@ -14,15 +13,9 @@
     list-style: none;
 }
 
-.home{
-    position: fixed;
-    left: 0;
-}
-
 .login-register{
-    position: fixed;
     padding-right: 40px;
-    right: 0;
+    padding-left: 0;
 }
 
 .opcao{
@@ -46,6 +39,6 @@
 }
 
 .outro{
-    margin: auto;
-    padding-right: 2%; /*para compensar a barra de rolagem (existe outra maneira?)*/
+    padding-left: 76px; /*compensa o link à mais na direita (olhômetro)*/
+    margin: 0 auto;
 }
