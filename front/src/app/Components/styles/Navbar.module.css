@@ -1,0 +1,22 @@
+.lista{
+    display: flex;
+    list-style: none;
+}
+
+.opcao{
+    margin: 0 10px;
+    transition: transform 200ms;
+}
+
+.opcao:hover{
+    transform: translateY(3px);
+}
+
+.ancora{
+    color: blue;
+    transition: color 200ms;
+}
+
+.ancora:hover{
+    color: lightblue;
+}

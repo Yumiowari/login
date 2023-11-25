@@ -1,6 +1,6 @@
 # Login
 
-Sistema de cadastro e login com interface em React e servidor ExpressJS.
+Sistema de cadastro e login com interface em __React__ (facilitado por __NextJS__) e servidor __ExpressJS__.
 
 Para rodar, tanto no _front_ quanto no _back_, execute `npm i` para instalar os pacotes utilizados e,
 

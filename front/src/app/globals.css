@@ -1,0 +1,25 @@
+body{
+  margin: 0;
+}
+
+header, main, footer{
+  display: flex;
+}
+
+main{
+  min-height: 100vh;
+}
+
+header, footer{
+  justify-content: center;
+  background-color: black;
+  color: white; /*cor do texto*/
+}
+
+header{
+  top: 0;
+}
+
+footer{
+  margin-top: auto;
+}
