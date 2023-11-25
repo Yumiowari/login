@@ -14,11 +14,11 @@ export default function Navbar () {
 
             <ul className={styles['login-register']}>
                 <li className={styles['opcao']}>
-                    <Link href='/' className={styles['ancora']}>Login</Link>
+                    <Link href='/login' className={styles['ancora']}>Login</Link>
                 </li>
 
                 <li className={styles['opcao']}>
-                    <Link href='/' className={styles['ancora']}>Cadastro</Link>
+                    <Link href='/register' className={styles['ancora']}>Cadastro</Link>
                 </li>
             </ul>
         </div>
