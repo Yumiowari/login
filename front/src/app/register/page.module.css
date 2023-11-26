@@ -11,7 +11,7 @@
     flex-direction: column;
 }
 
-.entrada, .botao{
+.botao{
     margin-bottom: 16px;
 }
 
@@ -24,4 +24,8 @@
 .ancora:hover{
     transform: translateY(-3px);
     color: lightblue;
+}
+
+.erro{
+    color: red;
 }

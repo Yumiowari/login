@@ -69,15 +69,16 @@ app.post('/register', async (req, res) => {
     res.status(200).send('Tudo certo. Usuário cadastrado com sucesso!');
 });
 
-function verificaToken(req, res, next){ // chame para proteger a rota com token!
-    const authHeaders = req.headers['authorization'];
+app.post('/session', async (req, res) => {
+    console.log(req); // remover /!\
+    
+    const token = req.body;
 
-    const token = authHeaders && authHeaders.split('')[1]; // ignora o 'bearer'
+    if(token == null) return res.status(401).send('Acesso negado.'); // se o token for nulo ou indefinido
 
-    if(token == null) return res.status(401).send('Acesso negado!'); // se null ou undefined
+    jwt.verify(token, process.env.TOKEN, (error) => {
+        if(error) return res.status(403).send('Token inválido ou expirado.'); // se o token for inválido
+    });
 
-    jwt.verify(token, process.env.TOKEN, (err) => {
-        if(err) return res.status(403).send('Token inválido ou expirado.');
-        next(); // continua para a função somente se validou
-    })
-}
+    return res.status(200).send('Token validado!');
+})
