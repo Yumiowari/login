@@ -33,9 +33,6 @@ export default function Login () {
             
             const token = response.data.token; // extrai o token
 
-            console.log('token: ');
-            console.log(token); // remover /!\
-
             sessionStorage.setItem('token', token);
 
             if(token)router.push('/session');
