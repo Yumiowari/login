@@ -70,9 +70,7 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/session', async (req, res) => {
-    console.log(req); // remover /!\
-    
-    const token = req.body;
+    const token = req.body.token;
 
     if(token == null) return res.status(401).send('Acesso negado.'); // se o token for nulo ou indefinido
 

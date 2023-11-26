@@ -11,15 +11,13 @@ export default function Session () {
     useEffect(() => {
         const token = sessionStorage.getItem('token'); // recupera o token no local storage
 
-        async function validaSessao(data) {
-            console.log(data); // remover /!\
-            
+        async function validaSessao(data) {            
             try{
-                const response = await axios.post('http://localhost:3000/session', data);
+                const response = await axios.post('http://localhost:3001/session', {token: data});
 
                 if(response.status === 200){
                     setValidado(true);
-                    setMsg('Token validado!');
+                    setMsg(response.data);
                 }
             } catch (error) {
                 setValidado(false);
@@ -43,5 +41,4 @@ export default function Session () {
             </main>
         )
     }
-    
 }
