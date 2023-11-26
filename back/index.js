@@ -1,7 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const fs = require('fs');
+require('dotenv').config()
+const express = require('express')
+const cors = require('cors')
+const path = require('path')
+const fs = require('fs')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const app = express();
 
@@ -12,6 +15,7 @@ app.listen(3001, () => {
     console.log('Servidor ouvindo na porta 3001!');
 });
 
+// com validação de token
 app.post('/login', async (req, res) => {
     const {email, password} = req.body; // "desconstrói" o corpo da requisição em suas partes (é um objeto)
 
@@ -20,8 +24,11 @@ app.post('/login', async (req, res) => {
 
     for(let usuario of usuarios){
         if(usuario.email === email){ // se achar o e-mail
-            if(password === usuario.password){ // verifica se a senha coincide
-                return res.status(200).send('Login autenticado!');
+            const passwordValidado = await bcrypt.compare(password, usuario.password); // verifica se a senha coincide
+            if(passwordValidado){
+                const token = jwt.sign(usuario, process.env.TOKEN);
+                
+                return res.status(200).json({'token': token}); // se validou, devolve o token
             }else return res.status(422).send('E-mail ou senha incorretos.');
         }
     }
@@ -29,6 +36,7 @@ app.post('/login', async (req, res) => {
     return res.status(409).send(`Usuário com e-mail ${email} não existe. Considere criar uma conta!`);
 });
 
+// com encriptação da senha
 app.post('/register', async (req, res) => {
     const {username, email, password} = req.body; // "desconstrói" o corpo da requisição em suas partes (é um objeto)
 
@@ -43,11 +51,15 @@ app.post('/register', async (req, res) => {
 
     const id = usuarios.length + 1;
 
+    // faz uma senha criptografada
+    const salt = await bcrypt.genSalt(12);
+    const passwordBcrypt = await bcrypt.hash(password, salt); // transforma a senha num hash
+
     const novoUsuario = {
         id: id,
         username: username,
         email: email,
-        password: password
+        password: passwordBcrypt
     };
 
     usuarios.push(novoUsuario);
@@ -56,3 +68,16 @@ app.post('/register', async (req, res) => {
 
     res.status(200).send('Tudo certo. Usuário cadastrado com sucesso!');
 });
+
+function verificaToken(req, res, next){ // chame para proteger a rota com token!
+    const authHeaders = req.headers['authorization'];
+
+    const token = authHeaders && authHeaders.split('')[1]; // ignora o 'bearer'
+
+    if(token == null) return res.status(401).send('Acesso negado!'); // se null ou undefined
+
+    jwt.verify(token, process.env.TOKEN, (err) => {
+        if(err) return res.status(403).send('Token inválido ou expirado.');
+        next(); // continua para a função somente se validou
+    })
+}

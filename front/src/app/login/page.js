@@ -16,7 +16,12 @@ export default function Login () {
     const submit = async (data) => {
         try {
             const response = await axios.post('http://localhost:3001/login', data);
-            setMsg(response.data);
+            
+            const token = response.data.token; // extrai o token
+
+            sessionStorage.setItem('token', token);
+
+            if(token)setMsg('Login autenticado!'); // troque para router.push('/session');
         } catch (error) {
             setMsg(error.response.data);
         }
