@@ -2,7 +2,7 @@
     align-items: center;
 }
 
-.login, .cadastro{
+.login, .cadastro, .trocar-senha{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,4 +24,8 @@
 
 .erro{
     color: red;
+}
+
+.sucesso{
+    color: green;
 }

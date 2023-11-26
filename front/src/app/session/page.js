@@ -17,10 +17,12 @@ export default function Session () {
 
                 if(response.status === 200){
                     setValidado(true);
+
                     setMsg(response.data);
                 }
             } catch (error) {
                 setValidado(false);
+
                 setMsg(error.response.data);
             }
         }
@@ -31,7 +33,7 @@ export default function Session () {
     if(validado){
         return (
             <main>
-                <p>{msg}</p>
+                <p className={styles['sucesso']}>{msg}</p>
             </main>
         )
     }else{

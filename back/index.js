@@ -1,4 +1,4 @@
-require('dotenv').config()
+ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
@@ -28,7 +28,12 @@ app.post('/login', async (req, res) => {
             if(passwordValidado){
                 const token = jwt.sign(usuario, process.env.TOKEN);
                 
-                return res.status(200).json({'token': token}); // se validou, devolve o token
+                const info = {
+                    token: token,
+                    feedback: 'Login autenticado!'
+                }
+
+                return res.status(200).json(info); // se validou, devolve o token
             }else return res.status(422).send('E-mail ou senha incorretos.');
         }
     }
@@ -52,21 +57,32 @@ app.post('/register', async (req, res) => {
     const id = usuarios.length + 1;
 
     // faz uma senha criptografada
-    const salt = await bcrypt.genSalt(12);
+    let salt = await bcrypt.genSalt(12);
     const passwordBcrypt = await bcrypt.hash(password, salt); // transforma a senha num hash
+
+    const recKey = gerarRecKey(); // faz uma recovery key
+    
+    salt = await bcrypt.genSalt(12); // necessário?
+    const recKeyBcrypt = await bcrypt.hash(recKey, salt); // também criptografa a recovery key
 
     const novoUsuario = {
         id: id,
         username: username,
         email: email,
-        password: passwordBcrypt
+        password: passwordBcrypt,
+        recKey: recKeyBcrypt
     };
 
     usuarios.push(novoUsuario);
 
     fs.writeFileSync(caminho, JSON.stringify(usuarios, null, 2));
 
-    res.status(200).send('Tudo certo. Usuário cadastrado com sucesso!');
+    const info = {
+        feedback: 'Tudo certo. Usuário cadastrado com sucesso!',
+        recKey: recKey // devolve em pacote sem criptografia (método inseguro /!\)
+    }
+
+    res.status(200).send(info);
 });
 
 app.post('/session', async (req, res) => {
@@ -80,3 +96,46 @@ app.post('/session', async (req, res) => {
 
     return res.status(200).send('Token validado!');
 })
+
+function gerarRecKey () {
+    const numeroAleatorio = Math.floor(1000 + Math.random() * 9000);
+    return numeroAleatorio.toString();
+}
+
+app.post('/lost-account', async (req, res) => {
+    const {recKey, email, password} = req.body; // "desconstrói" o corpo da requisição em suas partes (é um objeto)
+
+    const caminho = path.join(__dirname, '.', 'db', 'usuarios.json'); // busca o banco de dados de usuários
+    let usuarios = JSON.parse(fs.readFileSync(caminho, {encoding: 'utf8', flag: 'r'})); // faz a LEITURA do banco de dados de usuários
+
+    for(let usuario of usuarios){
+        if(usuario.email === email){ // se achar o e-mail
+            const recKeyValidada = await bcrypt.compare(recKey, usuario.recKey); // verifica se a senha coincide
+            if(recKeyValidada){
+                // faz uma senha criptografada
+                const salt = await bcrypt.genSalt(12);
+                const passwordBcrypt = await bcrypt.hash(password, salt); // transforma a senha num hash
+
+                const novoUsuario = {
+                    id: usuario.id, // mesmo id
+                    username: usuario.username, // mesmo nome de usuário
+                    email: email,
+                    password: passwordBcrypt,
+                    recKey: usuario.recKey // mesma recovery key
+                };
+
+                usuarios = usuarios.filter(user => user.id !== usuario.id) // filtra o antigo
+
+                usuarios.push(novoUsuario);
+
+                usuarios.sort((a, b) => a.id - b.id); // ordena em ordem crescente pelo id
+
+                fs.writeFileSync(caminho, JSON.stringify(usuarios, null, 2));
+                
+                return res.status(200).send('Senha alterada com sucesso!'); // se validou, devolve o token
+            }else return res.status(422).send('E-mail ou recovery key incorretos.');
+        }
+    }
+
+    return res.status(409).send(`Usuário com e-mail ${email} não existe.`);
+});

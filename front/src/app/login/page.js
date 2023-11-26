@@ -4,10 +4,10 @@ import {useState} from 'react'
 import {useForm} from 'react-hook-form'
 import axios, * as others from 'axios'
 import Link from 'next/link'
-import styles from './page.module.css'
 import * as yup from 'yup'
 import {yupResolver} from '@hookform/resolvers/yup'
 import { useRouter } from 'next/navigation'
+import styles from './page.module.css'
 
 export default function Login () {
     const schema = yup.object({
@@ -16,6 +16,7 @@ export default function Login () {
     });
 
     const [msg, setMsg] = useState('');
+    const [esqueceu, setEsqueceu] = useState(false);
 
     const form = useForm({
         resolver: yupResolver(schema)
@@ -31,13 +32,21 @@ export default function Login () {
         try {
             const response = await axios.post('http://localhost:3001/login', data);
             
-            const token = response.data.token; // extrai o token
+            if(response.status === 200){
+                const token = response.data.token; // extrai o token
 
-            sessionStorage.setItem('token', token);
+                sessionStorage.setItem('token', token);
 
-            if(token)router.push('/session');
+                setMsg(response.data.feedback); // imprime o feedback
+
+                setEsqueceu(false);
+            
+                //if(token)router.push('/session');
+            }
         } catch (error) {
             setMsg(error.response.data);
+
+            setEsqueceu(true);
         }
     }
     
@@ -57,12 +66,19 @@ export default function Login () {
                 <button className={styles['botao']}>Entrar</button>
             </form>
 
-            <p>{msg}</p>
+            <p className={styles['sucesso']} style={{visibility : esqueceu ? 'hidden' : 'visible' }}>{msg}</p>
+
+            <p className={styles['erro']} style={{visibility : esqueceu ? 'visible' : 'hidden' }}>{msg}</p>
 
             <div className={styles['cadastro']}>
                 <p>Não possui conta?</p>
                 <Link href='/register' className={styles['ancora']}>Cadastro</Link>
             </div>
+
+            <div className={styles['trocar-senha']} style={{visibility : esqueceu ? 'visible' : 'hidden' }}>
+                <p className={styles['erro']}>Esqueceu sua senha?</p>
+                <Link href='/lost-account' className={styles['ancora']}>Trocar senha</Link>
+            </div >
         </main>
     )
 }

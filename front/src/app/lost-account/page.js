@@ -8,17 +8,16 @@ import * as yup from 'yup'
 import {yupResolver} from '@hookform/resolvers/yup'
 import styles from './page.module.css'
 
-export default function Register () {
+export default function LostAccount () {
     const schema = yup.object({
-        username: yup.string().required('Um nome de usuário precisa ser informado.'),
         email: yup.string().email('O e-mail é inválido.').required('Um e-mail precisa ser informado.'),
+        recKey: yup.string().required('A recovery key precisa ser informada.'),
         password: yup.string().min(4, 'A senha é insegura.').required('Uma senha precisa ser informada.'),
         confirmPassword: yup.string().required('Confirme sua senha!').oneOf([yup.ref('password')], 'As senhas não coincidem!')
     });
 
     const [msg, setMsg] = useState('');
     const [ok, setOk] = useState(false); // booleano para exibir o "fazer login?"
-    const [recKey, setRecKey] = useState('');
 
     const form = useForm({
         resolver: yupResolver(schema)
@@ -30,40 +29,38 @@ export default function Register () {
 
     const submit = async (data) => {
         try {
-            const response = await axios.post('http://localhost:3001/register', data);
+            const response = await axios.post('http://localhost:3001/lost-account', data);
 
             if(response.status === 200){
-                setMsg(response.data.feedback);
-
-                setRecKey(response.data.recKey);
-
+                setMsg(response.data);
+                
                 setOk(true); // a fim de apresentar o convite para login
             }
         } catch (error) {
-            setMsg(error.response.data); // quando há erro, retorna somente string
-        
+            setMsg(error.response.data);
+
             setOk(false);
         }
     }
     
     return (
         <main className={styles['outro']}>
-            <h2>Cadastre-se para acessar os serviços!</h2>
+            <h2>Troque sua senha!</h2>
 
             <form onSubmit={handleSubmit(submit)} noValidate className={styles['cadastro']}>
-                <label htmlFor='username'>Apelido</label>
-                <input type='text' id='username' {...register('username')} />
-                <p className={styles['erro']}>{errors.username?.message}</p>
-
                 <label htmlFor='email'>E-mail</label>
                 <input type='text' id='email' {...register('email')} />
                 <p className={styles['erro']}>{errors.email?.message}</p>
 
-                <label htmlFor='password'>Senha</label>
+                <label htmlFor='recKey'>Recovery Key</label>
+                <input type='text' id='recKey' {...register('recKey')} />
+                <p className={styles['erro']}>{errors.recKey?.message}</p>
+
+                <label htmlFor='password'>Nova senha</label>
                 <input type='password' id='password' {...register('password')} />
                 <p className={styles['erro']}>{errors.password?.message}</p>
 
-                <label htmlFor='confirmPassword'>Confirme a senha</label>
+                <label htmlFor='confirmPassword'>Confirme a nova senha</label>
                 <input type='password' id='confirmPassword' {...register('confirmPassword')} />
                 <p className={styles['erro']}>{errors.confirmPassword?.message}</p>
 
@@ -73,8 +70,6 @@ export default function Register () {
             <p className={styles['sucesso']} style={{visibility : ok ? 'visible' : 'hidden' }}>{msg}</p>
 
             <p className={styles['erro']} style={{visibility : ok ? 'hidden' : 'visible' }}>{msg}</p>
-
-            <p className={styles['rec-key']} style={{visibility : ok ? 'visible' : 'hidden' }}>Guarde sua Recovery Key: {recKey}</p>
 
             <div className={styles['login']} style={{visibility : ok ? 'visible' : 'hidden' }}>
                 <p>Faça</p>
