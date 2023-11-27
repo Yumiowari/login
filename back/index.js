@@ -85,8 +85,10 @@ app.post('/register', async (req, res) => {
     res.status(200).send(info);
 });
 
-app.post('/session', async (req, res) => {
-    const token = req.body.token;
+app.get('/session', async (req, res) => {
+    let token = req.get('Authorization');
+    
+    token = token.split(' ')[1];
 
     if(token == null) return res.status(401).send('Acesso negado.'); // se o token for nulo ou indefinido
 

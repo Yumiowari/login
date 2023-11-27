@@ -1,2 +1,9 @@
 [
+  {
+    "id": 1,
+    "username": "rafael",
+    "email": "rafael@gmail.com",
+    "password": "$2b$12$KXKU4HzYVKQPy4vwfWaxL.5bp64HmD6A4jzvtVgfvECtls7a49uzS",
+    "recKey": "$2b$12$uR4AXr.AwoG2Oyo6kymjjuFz9B.k5jDFYqvv5JxDxd4A587YCqEoS"
+  }
 ]
