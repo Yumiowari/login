@@ -88,15 +88,15 @@ app.post('/register', async (req, res) => {
 app.get('/session', async (req, res) => {
     let token = req.get('Authorization');
 
-    token = token.split(' ')[1];
+    if(token){
+        token = token.split(' ')[1];
 
-    if(token == null) return res.status(401).send('Acesso negado.'); // se o token for nulo ou indefinido
+        jwt.verify(token, process.env.TOKEN, (error) => {
+            if(error) return res.status(403).send('Token inválido ou expirado.'); // se o token for inválido
+        });
 
-    jwt.verify(token, process.env.TOKEN, (error) => {
-        if(error) return res.status(403).send('Token inválido ou expirado.'); // se o token for inválido
-    });
-
-    return res.status(200).send('Token validado!');
+        return res.status(200).send('Token validado!');
+    }else return res.status(401).send('Acesso negado.'); // se o token for nulo ou indefinido
 })
 
 function gerarRecKey () {
