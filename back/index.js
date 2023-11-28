@@ -87,7 +87,7 @@ app.post('/register', async (req, res) => {
 
 app.get('/session', async (req, res) => {
     let token = req.get('Authorization');
-    
+
     token = token.split(' ')[1];
 
     if(token == null) return res.status(401).send('Acesso negado.'); // se o token for nulo ou indefinido
@@ -126,7 +126,7 @@ app.post('/lost-account', async (req, res) => {
                     recKey: usuario.recKey // mesma recovery key
                 };
 
-                usuarios = usuarios.filter(user => user.id !== usuario.id) // filtra o antigo
+                usuarios = usuarios.filter(user => user.id !== usuario.id); // filtra o antigo
 
                 usuarios.push(novoUsuario);
 

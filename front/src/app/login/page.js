@@ -6,7 +6,7 @@ import axios, * as others from 'axios'
 import Link from 'next/link'
 import * as yup from 'yup'
 import {yupResolver} from '@hookform/resolvers/yup'
-import { useRouter } from 'next/navigation'
+import {useRouter} from 'next/navigation'
 import styles from './page.module.css'
 import {setCookie} from 'nookies'
 
